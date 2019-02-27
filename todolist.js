@@ -1,3 +1,4 @@
+
 var detail = 0;
 function getvalue() {
     if (detail == 0) {
@@ -32,41 +33,44 @@ function getvalue() {
 }
 var array = [{
     "time": "10-10-2010",
-    "description": "Hello World"
+    "description": "reading"
 }]
 
 function TODO() {
 
-    var a = document.getElementById("calendar").value;
-    var b = document.getElementById("descript").value;
+    var id1 = document.getElementById("calendar").value;
+    var id2 = document.getElementById("descript").value;
     
-    array.push({ "time": a, "description": b })
+    array.push({ "time": id1, "description": id2 })
     createTable();
     
     
 }
-
-var table = document.createElement('table');
+    function createTable() { 
+    let previousTable = document.getElementById('dynamicTable');
+    if (!!previousTable) {
+        previousTable.remove();
+    }
+    var table = document.createElement('table');
     table.setAttribute('id', 'dynamicTable');
     var header = Object.keys(array[0]);
     var tr = document.createElement('tr');
-    for (var i = 0; i < header.length; i++) {
+    for (var index = 0; index < header.length; index++) {
         var th = document.createElement('th');
-        th.innerHTML = header[i];
+        th.innerHTML = header[index];
         th.setAttribute('class', 'tableClass1');
-        th.setAttribute('id', header[i])
+        th.setAttribute('id', header[index])
         tr.appendChild(th);
     }
-    
-    
+       
     table.appendChild(tr);
+    
 
-function createTable() { 
-    for (var i = 0; i < array.length; i++) {
+    for (var index = 0; index < array.length; index++) {
         var tr = document.createElement('tr');
-        for (var j = 0; j < header.length; j++) {
+        for (var count = 0; count < header.length; count++) {
             var td = document.createElement('td');
-            td.innerHTML = array[i][header[j]];
+            td.innerHTML = array[index][header[count]];
             td.setAttribute('class', 'tableClass');
             tr.appendChild(td);
         }
@@ -83,4 +87,28 @@ function createTable() {
         
     }
     document.body.appendChild(table);
-   }
+    addEventsToColumns();
+}
+
+function addEventsToColumns() {
+    var header = Object.keys(array[0]);
+    for (var index = 0; index < header.length; index++) {
+        document.getElementById(header[index]).addEventListener('click', function (event) {
+           console.log(event);
+            sortTable(event.target.innerText)
+        })
+    }
+}
+
+let flag = true;
+function sortTable(param) {
+    arr_of_obj.sort(compare);
+    function compare(id1, id2) {
+        if (id1[param] > id2[param] && flag)
+            return 1;
+        else
+            return -1;
+    }
+    flag = !flag;
+    createTable();
+}
